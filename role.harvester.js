@@ -1,3 +1,5 @@
+require('prototype.creep')()
+
 module.exports = {
   run: function(creep) {
     // No energy
@@ -20,7 +22,7 @@ module.exports = {
       })
       if (structure != undefined) {
         if(creep.transfer(structure, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-          creep.moveTo(structure, { maxRooms: 1 })
+          creep.moveToDraw(structure, { maxRooms: 1 })
         }
       }
     } 
@@ -33,7 +35,7 @@ module.exports = {
       // }
       source = creep.pos.findClosestByPath(FIND_SOURCES)
       if (creep.harvest(source) == ERR_NOT_IN_RANGE) {
-        creep.moveTo(source, { maxRooms: 1 })
+        creep.moveToDraw(source, { maxRooms: 1 })
       }
     }
   }

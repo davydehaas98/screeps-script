@@ -1,3 +1,4 @@
+require('prototype.creep')()
 var roleUpgrader = require('role.upgrader')
 
 module.exports = {
@@ -17,7 +18,7 @@ module.exports = {
       var constructionSite = creep.pos.findClosestByPath(FIND_CONSTRUCTION_SITES)
       if (constructionSite != undefined) {
         if (creep.build(constructionSite) == ERR_NOT_IN_RANGE) {
-          moveTo(constructionSite)
+          creep.moveToDraw(constructionSite)
         }
       } else {
         roleUpgrader.run(creep)
@@ -28,7 +29,7 @@ module.exports = {
     else {
       var source = creep.pos.findClosestByPath(FIND_SOURCES)
       if (creep.harvest(source) == ERR_NOT_IN_RANGE) {
-        creep.moveTo(source, { maxRooms: 1 })
+        creep.moveToDraw(source, { maxRooms: 1 })
       }
     }
   }

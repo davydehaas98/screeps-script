@@ -1,3 +1,5 @@
+require('prototype.creep')()
+
 module.exports = function() {
   StructureSpawn.prototype.createCustomCreep = 
   function(energy, roleName) {
@@ -18,7 +20,7 @@ module.exports = function() {
       working: false
     })
   }
-  
+
   StructureSpawn.prototype.createLongDistanceHarvester =
   function (energy, numberOfWorkParts, home, target, sourceIndex) {
     var body = []

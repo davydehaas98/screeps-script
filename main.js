@@ -1,4 +1,5 @@
 require('prototype.spawn')()
+require('prototype.creep')()
 var roleHarvester = require('role.harvester')
 var roleUpgrader = require('role.upgrader')
 var roleBuilder = require('role.builder')
@@ -51,12 +52,12 @@ module.exports.loop = function () {
     }
   }
 
-  var minNumberOfHarvesters = 10
+  var minNumberOfHarvesters = 8
   var minNumberOfUpgraders = 1
   var minNumberOfBuilders = 2
   var minNumberOfRepairers = 2
   var minNumberOfWallRepairers = 1
-  var minLongDistanceHarvesters = 1
+  var minLongDistanceHarvesters = 0
   var numberOfHarvesters = _.sum(Game.creeps, (c) => c.memory.role == 'harvester')
   var numberOfUpgraders = _.sum(Game.creeps, (c) => c.memory.role == 'upgrader')
   var numberOfBuilders = _.sum(Game.creeps, (c) => c.memory.role == 'builder')
@@ -82,10 +83,9 @@ module.exports.loop = function () {
     name = Game.spawns.Spawn1.createCustomCreep(energy, 'builder')
   } else if (numberOfWallRepairers < minNumberOfWallRepairers) {
     name = Game.spawns.Spawn1.createCustomCreep(energy, 'wallRepairer')
+  } else if (numberOfLongDistanceHarvesters < minLongDistanceHarvesters) {
+    name = Game.spawns.Spawn1.createLongDistanceHarvester(energy, 2, HOME, 'W3N6', 0)
   } 
-  // else if (numberOfLongDistanceHarvesters < minLongDistanceHarvesters) {
-  //   name = Game.spawns.Spawn1.createLongDistanceHarvester(energy, 1, HOME, 'W3N7', 0)
-  // } 
   else {
     name = Game.spawns.Spawn1.createCustomCreep(energy, 'builder')
   }

@@ -1,3 +1,5 @@
+require('prototype.creep')()
+
 module.exports = {
   run: function(creep) {
     // No energy
@@ -13,15 +15,15 @@ module.exports = {
     // Upgrade controller
     if(creep.memory.working == true) {
       if (creep.upgradeController(creep.room.controller) == ERR_NOT_IN_RANGE) {
-        creep.moveTo(creep.room.controller, { maxRooms: 1 })
+        creep.moveToDraw(creep.room.controller, { maxRooms: 1 })
       }
     }
-    
+
     // Harvest Energy
     else {
       var source = creep.pos.findClosestByPath(FIND_SOURCES)
       if (creep.harvest(source) == ERR_NOT_IN_RANGE) {
-        creep.moveTo(source, { maxRooms: 1 })
+        creep.moveToDraw(source, { maxRooms: 1 })
       }
     }
   }

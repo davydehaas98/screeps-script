@@ -1,3 +1,5 @@
+require('prototype.creep')()
+
 module.exports = {
   run: function(creep) {
     // No energy
@@ -21,12 +23,12 @@ module.exports = {
         })
         if (structure != undefined) {
           if (creep.transfer(structure, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-            creep.moveTo(structure)
+            creep.moveToDraw(structure)
           }
         }
       } else {
         var exit = creep.room.findExitTo(creep.memory.home)
-        creep.moveTo(creep.pos.findClosestByRange(exit))
+        creep.moveToDraw(creep.pos.findClosestByRange(exit))
       }
     } 
     
@@ -35,11 +37,11 @@ module.exports = {
       if (creep.room.name == creep.memory.target) {
         var source = creep.room.find(FIND_SOURCES)[creep.memory.sourceIndex]
         if (creep.harvest(source) == ERR_NOT_IN_RANGE) {
-          creep.moveTo(source)
+          creep.moveToDraw(source)
         }
       } else {
         var exit = creep.room.findExitTo(creep.memory.target)
-        creep.moveTo(creep.pos.findClosestByRange(exit))
+        creep.moveToDraw(creep.pos.findClosestByRange(exit))
       }
     }
   }
