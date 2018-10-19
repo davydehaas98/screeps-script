@@ -1,5 +1,3 @@
-require('prototype.creep')()
-
 module.exports = {
   run: function(creep) {
     // No energy
@@ -21,10 +19,7 @@ module.exports = {
 
     // Harvest Energy
     else {
-      var source = creep.pos.findClosestByPath(FIND_SOURCES)
-      if (creep.harvest(source) == ERR_NOT_IN_RANGE) {
-        creep.moveToDraw(source, { maxRooms: 1 })
-      }
+      creep.getEnergy(true, true)
     }
   }
 }

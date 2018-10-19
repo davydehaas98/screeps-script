@@ -29,11 +29,25 @@ module.exports = {
           creep.moveToDraw(structure, { maxRooms: 1 })
         }
       }
-    } 
+    }
     
     // Harvest Energy
     else {
-      creep.getEnergy(false, true)
+      // Find closest container
+      let container = creep.pos.findClosestByPath(FIND_STRUCTURES, {
+        filer: s => s.structureType == STRUCTURE_CONTAINER && s.store[RESOURCE_ENERGY] > 0
+      })
+
+      if (container == undefined) {
+        container = creep.room.storage
+      }
+
+      // Found container
+      if (container != undefined) {
+        if (creep.withdraw(container, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+          creep.moveToDraw(container)
+        }
+      }
     }
   }
 }

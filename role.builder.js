@@ -1,8 +1,13 @@
-require('prototype.creep')()
 var roleUpgrader = require('role.upgrader')
 
 module.exports = {
   run: function(creep) {
+    if (creep.memory.target != undefined && creep.room.name != creep.memory.target) {
+      var exit = creep.room.findExitTo(creep.memory.target)
+      creep.moveToDraw(creep.pos.findClosestByRange(exit))
+      return
+    }
+
     // No energy
     if (creep.memory.working == true && creep.carry.energy == 0) {
       creep.memory.working = false
@@ -27,10 +32,7 @@ module.exports = {
 
     // Harvest energy from source
     else {
-      var source = creep.pos.findClosestByPath(FIND_SOURCES)
-      if (creep.harvest(source) == ERR_NOT_IN_RANGE) {
-        creep.moveToDraw(source, { maxRooms: 1 })
-      }
+      creep.getEnergy(true, true)
     }
   }
 }

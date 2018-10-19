@@ -1,5 +1,3 @@
-require('prototype.creep')()
-
 module.exports = {
   run: function(creep) {
     if (creep.room.name != creep.memory.target) {

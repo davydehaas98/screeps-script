@@ -1,4 +1,3 @@
-require('prototype.creep')()
 var roleBuilder = require('role.builder')
 
 module.exports = {
@@ -22,17 +21,16 @@ module.exports = {
         if (creep.repair(structure) == ERR_NOT_IN_RANGE) {
           creep.moveToDraw(structure, { maxRooms: 1 })
         }
-      } else {
+      } 
+      // Look for construction site
+      else {
         roleBuilder.run(creep)
       }
     }
 
     // Harvest energy from source
     else {
-      var source = creep.pos.findClosestByPath(FIND_SOURCES)
-      if (creep.harvest(source) == ERR_NOT_IN_RANGE) {
-        creep.moveToDraw(source, { maxRooms: 1 })
-      }
+      creep.getEnergy(true, true)
     }
   }
 }

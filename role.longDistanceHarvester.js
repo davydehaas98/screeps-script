@@ -1,5 +1,3 @@
-require('prototype.creep')()
-
 module.exports = {
   run: function(creep) {
     // No energy
@@ -13,7 +11,7 @@ module.exports = {
     }
   
     // Transfer energy
-    if(creep.memory.working == true) {
+    if (creep.memory.working == true) {
       if (creep.room.name == creep.memory.home) {
         var structure = creep.pos.findClosestByRange(FIND_MY_STRUCTURES, {
           filter: s => (s.structureType == STRUCTURE_SPAWN
