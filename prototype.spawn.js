@@ -15,16 +15,16 @@ StructureSpawn.prototype.spawnCreepsIfNecessary = function () {
   // Number of creeps assigned to a specific role
   let numberOfCreeps = {}
   for(let role of roles) {
-    numberOfCreeps[role] = _.sum(creepsInRoom, c => c.memory.role == role)
+    numberOfCreeps[role] = _.sum(creepsInRoom, c => c.memory.role === role)
   }
 
   let maxEnergy = room.energyCapacityAvailable
   let name = undefined
 
   // Create backup creep if nessecary
-  if(numberOfCreeps['harvester'] == 0 && numberOfCreeps['lorry'] == 0) {
+  if(numberOfCreeps['harvester'] === 0 && numberOfCreeps['lorry'] === 0) {
     if (numberOfCreeps['miner'] > 0 || 
-    (room.storage != undefined && room.storage.store[RESOURCE_ENERGY] >= 150 + 550)) {
+    (room.storage !== undefined && room.storage.store[RESOURCE_ENERGY] >= 150 + 550)) {
       // Create lorry
       name = this.createLorry(150)
     }
@@ -39,13 +39,20 @@ StructureSpawn.prototype.spawnCreepsIfNecessary = function () {
     // Check if all sources have miners
     let sources = room.find(FIND_SOURCES)
     for (let source of sources) {
-      if (!_.some(creepsInRoom, c => c.memory.role == 'miner' && c.memory.sourceIndex == source.id)) {
+
+      // Miner does not already exist for this source
+      if (!_.some(creepsInRoom, c => c.memory.role === 'miner' && c.memory.sourceIndex === source.id)) {
         // Has the source a container
         let containers = source.pos.findInRange(FIND_STRUCTURES, 1, {
-          filter: s => s.structureType == STRUCTURE_CONTAINER
+          filter: s => s.structureType === STRUCTURE_CONTAINER && s.store[RESOURCE_ENERGY] < s.storeCapacity
         })
-        // The source has a container
-        if (containers.length > 0) {
+
+        // Number of total miners in the room
+        let numberOfMiners = room.find(FIND_MY_CREEPS, {
+          filter: c => c.memory.role === 'miner'
+        }).length
+        // The source has a container and no miner
+        if (containers.length > 0 && numberOfMiners < sources.length) {
           // Create a miner
           name = this.createMiner(source.id)
           break
@@ -54,10 +61,10 @@ StructureSpawn.prototype.spawnCreepsIfNecessary = function () {
     }
   }
 
-  if (name == undefined) {
+  if (name === undefined) {
     for (let role of roles) {
       // Check for claim order
-      if (role == 'claimer' && this.memory.claimRoom != undefined) {
+      if (role === 'claimer' && this.memory.claimRoom !== undefined) {
         // Create a claimer
         name = this.createClaimer(this.memory.claimRoom)
 
@@ -69,7 +76,7 @@ StructureSpawn.prototype.spawnCreepsIfNecessary = function () {
 
       // Check other roles
       else if (numberOfCreeps[role] < this.memory.minCreeps[role]) {
-        if (role == 'lorry') {
+        if (role === 'lorry') {
           name = this.createLorry(150)
         }
         else {
@@ -82,9 +89,9 @@ StructureSpawn.prototype.spawnCreepsIfNecessary = function () {
 
   // No spawn occurred, check for LongDistanceHarvesters
   let numberOfLongDistanceHarvesters = {}
-  if (name == undefined) {
+  if (name === undefined) {
     for (let roomName in this.memory.minLongDistanceHarvesters) {
-      numberOfLongDistanceHarvesters[roomName] = _.sum(Game.creeps, c => c.memory.role == 'longDistanceHarvester' && c.memory.target == roomName)
+      numberOfLongDistanceHarvesters[roomName] = _.sum(Game.creeps, c => c.memory.role === 'longDistanceHarvester' && c.memory.target === roomName)
 
       if (numberOfLongDistanceHarvesters[roomName] < this.memory.minLongDistanceHarvesters[roomName]) {
         name = this.createLongDistanceHarvester(maxEnergy, 2, room.name, roomName, 0)
@@ -93,8 +100,8 @@ StructureSpawn.prototype.spawnCreepsIfNecessary = function () {
   }
 
   // Print name to console
-  if (name != undefined && _.isString(name)) {
-    console.log(this.name + " spawned new creep: " + name + " (" + Game.creeps[name].memory.role + ")")
+  if (name !== undefined && _.isString(name)) {
+    console.log(this.name + " spawned a new creep called " + name + "! (" + Game.creeps[name].memory.role + ")")
     for (let role of roles) {
         console.log(role + ": " + numberOfCreeps[role])
     }

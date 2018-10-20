@@ -1,26 +1,26 @@
 module.exports = {
   run: function(creep) {
     // No energy
-    if (creep.memory.working == true && creep.carry.energy == 0) {
+    if (creep.memory.working && creep.carry.energy === 0) {
       creep.memory.working = false
     }
 
     // Full capacity
-    else if (creep.memory.working == false & creep.carry.energy == creep.carryCapacity) {
+    else if (!creep.memory.working & creep.carry.energy === creep.carryCapacity) {
       creep.memory.working = true
     }
   
     // Transfer energy
-    if (creep.memory.working == true) {
-      if (creep.room.name == creep.memory.home) {
+    if (creep.memory.working) {
+      if (creep.room.name === creep.memory.home) {
         var structure = creep.pos.findClosestByRange(FIND_MY_STRUCTURES, {
-          filter: s => (s.structureType == STRUCTURE_SPAWN
-          || s.structureType == STRUCTURE_EXTENSION 
-          || s.structureType == STRUCTURE_TOWER)
+          filter: s => (s.structureType === STRUCTURE_SPAWN
+          || s.structureType === STRUCTURE_EXTENSION 
+          || s.structureType === STRUCTURE_TOWER)
           && s.energy < s.energyCapacity
         })
-        if (structure != undefined) {
-          if (creep.transfer(structure, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+        if (structure !== undefined) {
+          if (creep.transfer(structure, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
             creep.moveToDraw(structure)
           }
         }
@@ -32,9 +32,9 @@ module.exports = {
     
     // Harvest Energy
     else {
-      if (creep.room.name == creep.memory.target) {
+      if (creep.room.name === creep.memory.target) {
         var source = creep.room.find(FIND_SOURCES)[creep.memory.sourceIndex]
-        if (creep.harvest(source) == ERR_NOT_IN_RANGE) {
+        if (creep.harvest(source) === ERR_NOT_IN_RANGE) {
           creep.moveToDraw(source)
         }
       } else {
