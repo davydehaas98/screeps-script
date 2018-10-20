@@ -104,6 +104,7 @@ StructureSpawn.prototype.spawnCreepsIfNecessary = function () {
   }
 }
 
+// Create custom creep function
 StructureSpawn.prototype.createCustomCreep = function(energy, roleName) {
   var numberOfParts = Math.floor(energy / 200)
   var body = []
@@ -123,6 +124,7 @@ StructureSpawn.prototype.createCustomCreep = function(energy, roleName) {
   })
 }
 
+// Create long distance harvester function
 StructureSpawn.prototype.createLongDistanceHarvester = function(energy, numberOfWorkParts, home, target, sourceIndex) {
   var body = []
   for (let i = 0; i < numberOfWorkParts; i++) {
@@ -148,6 +150,7 @@ StructureSpawn.prototype.createLongDistanceHarvester = function(energy, numberOf
   })
 }
 
+// Create claimer function
 StructureSpawn.prototype.createClaimer = function(target) {
   return this.createCreep([CLAIM,MOVE], undefined, {
     role: 'claimer',
@@ -155,6 +158,7 @@ StructureSpawn.prototype.createClaimer = function(target) {
   })
 }
 
+// Create miner function
 StructureSpawn.prototype.createMiner = function(sourceId) {
     return this.createCreep([WORK, WORK, WORK, WORK, WORK, MOVE], undefined, {
       role: 'miner',
@@ -162,6 +166,7 @@ StructureSpawn.prototype.createMiner = function(sourceId) {
     })
 }
 
+// Create lorry function
 StructureSpawn.prototype.createLorry = function(energy) {
   var numberOfParts = Math.floor(energy / 150)
   var body = []
