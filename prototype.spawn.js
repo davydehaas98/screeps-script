@@ -5,7 +5,9 @@ var roles = [
   'upgrader',
   'repairer',
   'builder',
-  'wallRepairer'
+  'wallRepairer',
+  'attacker',
+  'miner'
 ]
 
 StructureSpawn.prototype.spawnCreepsIfNecessary = function () {
@@ -38,10 +40,11 @@ StructureSpawn.prototype.spawnCreepsIfNecessary = function () {
   else {
     // Check if all sources have miners
     let sources = room.find(FIND_SOURCES)
-    for (let source of sources) {
+    let miners = room.find(FIND_MY_CREEPS, { filter: c => c.memory.role === 'miner' })
 
+    for (let source of sources) {
       // Miner does not already exist for this source
-      if (!_.some(creepsInRoom, c => c.memory.role === 'miner' && c.memory.sourceIndex === source.id)) {
+      if (!_.some(miners, m => m.memory.sourceId === source.id)) {
         // Has the source a container
         let containers = source.pos.findInRange(FIND_STRUCTURES, 1, {
           filter: s => s.structureType === STRUCTURE_CONTAINER && s.store[RESOURCE_ENERGY] < s.storeCapacity
@@ -78,6 +81,9 @@ StructureSpawn.prototype.spawnCreepsIfNecessary = function () {
       else if (numberOfCreeps[role] < this.memory.minCreeps[role]) {
         if (role === 'lorry') {
           name = this.createLorry(150)
+        }
+        else if (role === 'attacker') {
+          name = this.createAttacker(maxEnergy)
         }
         else {
           name = this.createCustomCreep(maxEnergy, role)
@@ -175,8 +181,8 @@ StructureSpawn.prototype.createMiner = function(sourceId) {
 
 // Create lorry function
 StructureSpawn.prototype.createLorry = function(energy) {
-  var numberOfParts = Math.floor(energy / 150)
-  var body = []
+  let numberOfParts = Math.floor(energy / 150)
+  let body = []
   for (let i = 0; i < numberOfParts * 2; i++) {
     body.push(CARRY)
   }
@@ -186,6 +192,19 @@ StructureSpawn.prototype.createLorry = function(energy) {
 
   return this.createCreep(body, undefined, {
     role: 'lorry', 
+    working: false
+  })
+}
+
+StructureSpawn.prototype.createAttacker = function(energy) {
+  let numberOfParts = Math.floor(energy / 80) - 1
+  let body = []
+  body.push(MOVE)
+  for (let i = 0; i < numberOfParts; i++) {
+    body.push(ATTACK)
+  }
+  return this.createCreep(body, undefined, {
+    role: 'attacker',
     working: false
   })
 }

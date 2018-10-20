@@ -15,7 +15,7 @@ module.exports = {
     // Find repairable wall
     if (creep.memory.working) {
       var walls = creep.room.find(FIND_STRUCTURES, {
-        filter: s => s.structureType === STRUCTURE_WALL
+        filter: s => s.structureType === STRUCTURE_WALL || s.structureType === STRUCTURE_RAMPART
       })
 
       var target = undefined

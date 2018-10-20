@@ -12,16 +12,16 @@ module.exports.loop = function() {
     var evolve = numberOfCreeps['miner'] = _.sum(creepsInRoom, (c) => c.memory.role === 'miner')
     spawns.memory.minCreeps = {}
     spawns.memory.minCreeps.upgrader = 1
-    spawns.memory.minCreeps.builder = 4
-    spawns.memory.minCreeps.repairer = 2
-    spawns.memory.minCreeps.wallRepairer = 2
-    spawns.memory.minCreeps.LongDistanceHarvester = 4
+    spawns.memory.minCreeps.builder = 3
+    spawns.memory.minCreeps.repairer = 1
+    spawns.memory.minCreeps.wallRepairer = 1
     spawns.memory.minCreeps.claimer = 0
     spawns.memory.minCreeps.harvester = 3-evolve
     spawns.memory.minCreeps.lorry = 2
     spawns.memory.minCreeps.miner = 0
+    spawns.memory.minCreeps.attacker = 3
     spawns.memory.minLongDistanceHarvesters = {}
-    spawns.memory.minLongDistanceHarvesters.W3N8 = 2
+    spawns.memory.minLongDistanceHarvesters.W3N8 = 0
   }
 
   // Run creep
