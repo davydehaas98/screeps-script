@@ -19,7 +19,7 @@ module.exports = {
           || s.structureType === STRUCTURE_TOWER)
           && s.energy < s.energyCapacity
         })
-        if (structure !== undefined) {
+        if (structure) {
           if (creep.transfer(structure, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
             creep.moveToDraw(structure)
           }
@@ -33,7 +33,7 @@ module.exports = {
     // Harvest Energy
     else {
       if (creep.room.name === creep.memory.target) {
-        var source = creep.room.find(FIND_SOURCES)[creep.memory.sourceIndex]
+        var source = creep.room.find(FIND_SOURCES)[creep.memory.sourceId]
         if (creep.harvest(source) === ERR_NOT_IN_RANGE) {
           creep.moveToDraw(source)
         }

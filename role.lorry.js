@@ -11,7 +11,7 @@ module.exports = {
     }
   
     // Transfer energy
-    if(creep.memory.working) {
+    if (creep.memory.working) {
       var structure = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {
         filter: s => (s.structureType === STRUCTURE_SPAWN
         || s.structureType === STRUCTURE_EXTENSION
@@ -19,12 +19,12 @@ module.exports = {
         && s.energy < s.energyCapacity
       })
 
-      if (structure === undefined) {
+      if (!structure) {
         structure = creep.room.storage
       }
 
       // Found storage
-      if (structure !== undefined) {
+      if (structure) {
         if(creep.transfer(structure, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
           creep.moveToDraw(structure, { maxRooms: 1 })
         }

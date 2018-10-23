@@ -10,7 +10,7 @@ module.exports = {
       creep.harvest(source)
     }
     else {
-      creep.moveToDraw(container)
+      creep.moveToDraw(container, { maxRooms: 1 })
     }
   }
 }

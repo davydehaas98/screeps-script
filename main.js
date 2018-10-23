@@ -1,32 +1,14 @@
+const config = require('config')
 require('prototype.spawn')
 require('prototype.creep')
 require('prototype.tower')
 
 module.exports.loop = function() {
+  // Configurate spawn
+  config()
 
-  // Set minimum creeps
-  var allSpawns = _.filter(Game.spawns, s => s.structureType === STRUCTURE_SPAWN)
-  for (let spawns of allSpawns) {
-    let numberOfCreeps = {}
-    let creepsInRoom = spawns.room.find(FIND_MY_CREEPS)
-    var evolve = numberOfCreeps['miner'] = _.sum(creepsInRoom, (c) => c.memory.role === 'miner')
-    spawns.memory.minCreeps = {}
-    spawns.memory.minCreeps.upgrader = 1
-    spawns.memory.minCreeps.builder = 3
-    spawns.memory.minCreeps.repairer = 1
-    spawns.memory.minCreeps.wallRepairer = 1
-    spawns.memory.minCreeps.claimer = 0
-    spawns.memory.minCreeps.harvester = 3-evolve
-    spawns.memory.minCreeps.lorry = 2
-    spawns.memory.minCreeps.miner = 0
-    spawns.memory.minCreeps.attacker = 3
-    spawns.memory.minLongDistanceHarvesters = {}
-    spawns.memory.minLongDistanceHarvesters.W3N8 = 0
-  }
-
-  // Run creep
+  // Clear memory
   for (let name in Memory.creeps) {
-    // Clear Memory
     if(Game.creeps[name] === undefined) {
       delete Memory.creeps[name]
     }

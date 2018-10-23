@@ -6,8 +6,9 @@ var roles = [
   'repairer',
   'builder',
   'wallRepairer',
+  'miner',
   'attacker',
-  'miner'
+  'defender'
 ]
 
 StructureSpawn.prototype.spawnCreepsIfNecessary = function () {
@@ -21,12 +22,12 @@ StructureSpawn.prototype.spawnCreepsIfNecessary = function () {
   }
 
   let maxEnergy = room.energyCapacityAvailable
-  let name = undefined
+  let name
 
-  // Create backup creep if nessecary
+  // Create backup creep
   if(numberOfCreeps['harvester'] === 0 && numberOfCreeps['lorry'] === 0) {
     if (numberOfCreeps['miner'] > 0 || 
-    (room.storage !== undefined && room.storage.store[RESOURCE_ENERGY] >= 150 + 550)) {
+    (room.storage && room.storage.store[RESOURCE_ENERGY] >= 150 + 550)) {
       // Create lorry
       name = this.createLorry(150)
     }
@@ -64,10 +65,10 @@ StructureSpawn.prototype.spawnCreepsIfNecessary = function () {
     }
   }
 
-  if (name === undefined) {
+  if (!name) {
     for (let role of roles) {
       // Check for claim order
-      if (role === 'claimer' && this.memory.claimRoom !== undefined) {
+      if (role === 'claimer' && this.memory.claimRoom) {
         // Create a claimer
         name = this.createClaimer(this.memory.claimRoom)
 
@@ -82,6 +83,30 @@ StructureSpawn.prototype.spawnCreepsIfNecessary = function () {
         if (role === 'lorry') {
           name = this.createLorry(150)
         }
+        else if (role === 'defender') {
+          let ramparts = room.find(FIND_MY_STRUCTURES, {
+            filter: s => s.structureType === STRUCTURE_RAMPART
+          })
+          for (let rampart of ramparts) {
+            // Defender does not already exist for this source
+            if (!_.some(creepsInRoom[role], d => d.memory.rampartId === rampart.id)) {
+
+              // Number of total defenders in the room
+              let numberOfDefenders = room.find(FIND_MY_CREEPS, {
+                filter: c => c.memory.role === 'defender'
+              }).length
+              // The rampant has no defender
+              if (numberOfDefenders < ramparts.length) {
+                // Create a Defender
+                name = this.createDefender(maxEnergy, rampart.id)
+                break
+              }
+            }
+            if (name) {
+              break
+            }
+          }
+        }
         else if (role === 'attacker') {
           name = this.createAttacker(maxEnergy)
         }
@@ -95,7 +120,7 @@ StructureSpawn.prototype.spawnCreepsIfNecessary = function () {
 
   // No spawn occurred, check for LongDistanceHarvesters
   let numberOfLongDistanceHarvesters = {}
-  if (name === undefined) {
+  if (!name) {
     for (let roomName in this.memory.minLongDistanceHarvesters) {
       numberOfLongDistanceHarvesters[roomName] = _.sum(Game.creeps, c => c.memory.role === 'longDistanceHarvester' && c.memory.target === roomName)
 
@@ -106,7 +131,7 @@ StructureSpawn.prototype.spawnCreepsIfNecessary = function () {
   }
 
   // Print name to console
-  if (name !== undefined && _.isString(name)) {
+  if (name && _.isString(name)) {
     console.log(this.name + " spawned a new creep called " + name + "! (" + Game.creeps[name].memory.role + ")")
     for (let role of roles) {
         console.log(role + ": " + numberOfCreeps[role])
@@ -145,8 +170,8 @@ StructureSpawn.prototype.createLongDistanceHarvester = function(energy, numberOf
   }
 
   energy -= 150 * numberOfWorkParts
-
   var numberOfParts = Math.floor(energy / 100)
+
   for (let i = 0; i < numberOfParts; i++) {
     body.push(CARRY)
   }
@@ -183,6 +208,7 @@ StructureSpawn.prototype.createMiner = function(sourceId) {
 StructureSpawn.prototype.createLorry = function(energy) {
   let numberOfParts = Math.floor(energy / 150)
   let body = []
+
   for (let i = 0; i < numberOfParts * 2; i++) {
     body.push(CARRY)
   }
@@ -197,14 +223,37 @@ StructureSpawn.prototype.createLorry = function(energy) {
 }
 
 StructureSpawn.prototype.createAttacker = function(energy) {
-  let numberOfParts = Math.floor(energy / 80) - 1
+  let numberOfParts = Math.floor(energy / 200)
   let body = []
-  body.push(MOVE)
+
+  for (let i = 0; i < numberOfParts; i++) {
+    body.push(MOVE)
+  }
+  for (let i = 0; i < numberOfParts; i++) {
+    body.push(RANGED_ATTACK)
+  }
+
+  return this.createCreep(body, undefined, {
+    role: 'attacker'
+  })
+}
+
+StructureSpawn.prototype.createDefender = function(energy, rampartId) {
+  let numberOfParts = Math.floor(energy / 300)
+  let body = []
+
+  for (let i = 0; i < numberOfParts / 2; i++) {
+    body.push(MOVE)
+  }
   for (let i = 0; i < numberOfParts; i++) {
     body.push(ATTACK)
   }
+  for (let i = 0; i < numberOfParts * 2; i++) {
+    body.push(TOUGH)
+  }
+
   return this.createCreep(body, undefined, {
-    role: 'attacker',
-    working: false
+    role: 'defender',
+    rampartId: rampartId
   })
 }

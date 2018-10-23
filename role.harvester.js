@@ -19,12 +19,12 @@ module.exports = {
         && s.energy < s.energyCapacity
       })
 
-      if (structure === undefined) {
+      if (!structure) {
         structure = creep.room.storage
       }
 
       // Found storage
-      if (structure !== undefined) {
+      if (structure) {
         if (creep.transfer(structure, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
           creep.moveToDraw(structure, { maxRooms: 1 })
         }

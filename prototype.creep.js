@@ -8,7 +8,8 @@ var roles = {
   claimer: require('role.claimer'),
   miner: require('role.miner'),
   lorry: require('role.lorry'),
-  attacker: require('role.attacker')
+  attacker: require('role.attacker'),
+  defender: require('role.defender')
 }
 
 Creep.prototype.moveToDraw = function(target) {
@@ -31,16 +32,16 @@ Creep.prototype.getEnergy = function(useContainer, useSource) {
       filter: s => (s.structureType === STRUCTURE_CONTAINER || s.structureType === STRUCTURE_STORAGE) && s.store[RESOURCE_ENERGY] > 0
     })
 
-    if (container !== undefined) {
+    if (container) {
       if (this.withdraw(container, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
         this.moveToDraw(container)
       }
     }
   }
 
-  if (container === undefined && useSource) {
+  if (!container && useSource) {
     // Find closests source
-    var source = this.pos.findClosestByPath(FIND_SOURCES_ACTIVE)
+    var source = this.pos.findClosestByPath(FIND_SOURCES)
 
     // Harvest energy
     if (this.harvest(source) === ERR_NOT_IN_RANGE) {

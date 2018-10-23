@@ -27,12 +27,12 @@ module.exports = {
             break
           }
         }
-        if (target !== undefined) {
+        if (target) {
           break
         }
       }
 
-      if (target !== undefined) {
+      if (target) {
         if (creep.repair(target) === ERR_NOT_IN_RANGE) {
           creep.moveToDraw(target, {maxRooms: 1})
         }
