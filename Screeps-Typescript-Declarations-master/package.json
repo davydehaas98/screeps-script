@@ -16,6 +16,6 @@
   "author": "Marko Sulamagi <marko.sulamagi@gmail.com>",
   "license": "MIT",
   "devDependencies": {
-    "typescript": "2.9.2"
+    "typescript": "4.4.3"
   }
 }
