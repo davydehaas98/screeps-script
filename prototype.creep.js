@@ -40,7 +40,7 @@ Creep.prototype.getEnergy = function(useContainer, useSource) {
   }
 
   if (!container && useSource) {
-    // Find closests source
+    // Find closest source
     var source = this.pos.findClosestByPath(FIND_SOURCES)
 
     // Harvest energy
