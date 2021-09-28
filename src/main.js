@@ -14,6 +14,11 @@ module.exports.loop = function() {
     }
   }
 
+  // Spawn new creep if necessary
+  for (let spawnName in Game.spawns) {
+    Game.spawns[spawnName].spawnCreepsIfNecessary()
+  }
+
   // Run creep role
   for (let name in Game.creeps) {
     Game.creeps[name].runRole()
@@ -23,10 +28,5 @@ module.exports.loop = function() {
   var towers = _.filter(Game.structures, s => s.structureType === STRUCTURE_TOWER)
   for (let tower of towers) {
     tower.defend()
-  }
-
-  // Spawn new creep if needed
-  for (let spawnName in Game.spawns) {
-    Game.spawns[spawnName].spawnCreepsIfNecessary()
   }
 }
