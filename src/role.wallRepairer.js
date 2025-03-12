@@ -1,12 +1,12 @@
 var roleBuilder = require('role.builder')
 
 module.exports = {
-  run: function(creep) {
+  run: function (creep) {
     // No energy
     if (creep.memory.working && creep.carry.energy === 0) {
       creep.memory.working = false
     }
-    
+
     // Full capacity
     else if (!creep.memory.working & creep.carry.energy === creep.carryCapacity) {
       creep.memory.working = true
@@ -34,7 +34,7 @@ module.exports = {
 
       if (target) {
         if (creep.repair(target) === ERR_NOT_IN_RANGE) {
-          creep.moveToDraw(target, {maxRooms: 1})
+          creep.moveToDraw(target, { maxRooms: 1 })
         }
       } else {
         roleBuilder.run(creep)

@@ -1,10 +1,10 @@
-StructureTower.prototype.defend = function() {
+StructureTower.prototype.defend = function () {
   // Attack mode
   var enemy = this.pos.findClosestByRange(FIND_HOSTILE_CREEPS)
   if (enemy) {
     this.attack(enemy)
   }
-  
+
   // Repair mode
   else {
     let walls = this.room.find(FIND_STRUCTURES, {

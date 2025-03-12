@@ -7,7 +7,7 @@ module.exports = function () {
     let miners = _.sum(creeps, (c) => c.memory.role === 'miner')
     let towers = _.sum(structures, s => s.structureType === STRUCTURE_TOWER)
     let ramparts = _.sum(structures, s => s.structureType === STRUCTURE_RAMPART)
-    
+
     spawn.memory.minCreeps = {
       upgrader: 1,
       builder: 4,
@@ -20,7 +20,7 @@ module.exports = function () {
       attacker: 3,
       defender: ramparts,
     }
-    
+
     spawn.memory.minLongDistanceHarvesters = {
       W3N8: 0,
     }

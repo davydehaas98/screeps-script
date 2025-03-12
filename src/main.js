@@ -1,16 +1,16 @@
-const config = require('config')
+const config = require('./config')
 require('prototype.spawn')
-require('prototype.creep')
 require('prototype.tower')
 
-module.exports.loop = function() {
+module.exports.loop = function () {
   // Configurate spawn
   config()
 
   // Clear memory
   for (let name in Memory.creeps) {
-    if(Game.creeps[name] === undefined) {
+    if (Game.creeps[name] === undefined) {
       delete Memory.creeps[name]
+      console.log("Cleared memory for creep: ", name)
     }
   }
 
@@ -25,7 +25,7 @@ module.exports.loop = function() {
   }
 
   // Start defending
-  var towers = _.filter(Game.structures, s => s.structureType === STRUCTURE_TOWER)
+  let towers = _.filter(Game.structures, s => s.structureType === STRUCTURE_TOWER)
   for (let tower of towers) {
     tower.defend()
   }

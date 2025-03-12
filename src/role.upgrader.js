@@ -1,5 +1,5 @@
 module.exports = {
-  run: function(creep) {
+  run: function (creep) {
     // No energy
     if (creep.memory.working && creep.carry.energy === 0) {
       creep.memory.working = false
@@ -16,7 +16,7 @@ module.exports = {
         filter: t => t.structureType === STRUCTURE_TOWER && t.energy < t.energyCapacity
       })
       if (tower && creep.transfer(tower) === ERR_NOT_IN_RANGE) {
-        creep.moveToDraw(tower, { maxRooms: 1 })             
+        creep.moveToDraw(tower, { maxRooms: 1 })
       }
       // Upgrade controller
       else if (creep.upgradeController(creep.room.controller) === ERR_NOT_IN_RANGE) {

@@ -12,24 +12,28 @@ var roles = {
   defender: require('role.defender')
 }
 
-Creep.prototype.moveToDraw = function(target) {
+Creep.prototype.moveToDraw = function (target) {
   return this.moveTo(target, {
     maxRooms: 1,
-    visualizePathStyle: { stroke: 'ffaa00'}
+    visualizePathStyle: { stroke: 'ffaa00' }
   })
 }
 
-Creep.prototype.runRole = function() {
+Creep.prototype.runRole = function () {
   roles[this.memory.role].run(this)
 }
 
-Creep.prototype.getEnergy = function(useContainer, useSource) {
+Creep.prototype.getEnergy = function (useContainer, useSource) {
   let container
 
   if (useContainer) {
     // Find closest container
     container = this.pos.findClosestByPath(FIND_STRUCTURES, {
-      filter: s => (s.structureType === STRUCTURE_CONTAINER || s.structureType === STRUCTURE_STORAGE) && s.store[RESOURCE_ENERGY] > 0
+      filter: s => (
+        s.structureType === STRUCTURE_CONTAINER
+        || s.structureType === STRUCTURE_STORAGE
+      )
+        && s.store[RESOURCE_ENERGY] > 0
     })
 
     if (container) {

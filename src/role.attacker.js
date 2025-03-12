@@ -1,5 +1,5 @@
 module.exports = {
-  run: function(creep) {
+  run: function (creep) {
     // Attack Hostile Creep
     let enemy = creep.pos.findClosestByRange(FIND_HOSTILE_CREEPS)
     if (enemy) {
