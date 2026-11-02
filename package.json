@@ -1,6 +1,6 @@
 {
   "name": "screeps-script",
   "devDependencies": {
-    "@types/screeps": "3.3.8"
+    "@types/screeps": "3.4.0"
   }
 }
